@@ -1,0 +1,33 @@
+# Credentials - CRITICAL
+.env
+*.env
+.env.*
+!.env.example
+kaggle.json
+.kaggle/
+**/kaggle.json
+**/access_token
+**/credentials.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Runtime artifacts
+badge-progress.json
+badge-tmp/
+comp-report-*.md
+data/
+downloads/
+*.csv
+*.zip
+*.tar.gz
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+.ipynb_checkpoints/

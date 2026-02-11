@@ -1,0 +1,126 @@
+# Kaggle MCP Server Reference
+
+> Official docs: https://www.kaggle.com/docs/mcp
+> Blog: https://www.kaggle.com/blog/kaggles-official-mcp-server
+
+## Endpoint
+
+```
+https://www.kaggle.com/mcp
+```
+
+Protocol: Streamable HTTP (MCP standard).
+
+## Authentication
+
+Pass your Kaggle API key as a Bearer token:
+
+```
+Authorization: Bearer <your_kaggle_api_key>
+```
+
+The API key is the `key` field from `~/.kaggle/kaggle.json` or your `KAGGLE_API_TOKEN`.
+
+## Client Configuration
+
+### Claude Code
+
+```bash
+claude mcp add kaggle --transport http https://www.kaggle.com/mcp \
+  --header "Authorization: Bearer YOUR_API_KEY"
+```
+
+### Claude Desktop / Cursor / Generic MCP Client
+
+```json
+{
+  "mcpServers": {
+    "kaggle": {
+      "url": "https://www.kaggle.com/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+## Tool Categories
+
+Use `tools/list` for exact tool names. The server provides tools across these categories:
+
+### Authentication
+- `authenticate` — Set Kaggle credentials (username + key)
+
+### Competition Tools
+- List available competitions (with search, category, sort, page filters)
+- Get competition details (evaluation metric, tags, kernel submission settings)
+- Download competition files (specific file or all, with path option)
+- List competition files (names, sizes, dates)
+- Submit predictions (file path + message)
+- List your submissions (scores, status)
+- Get leaderboard (team rankings, scores)
+
+### Dataset Tools
+- List/search datasets (search, user, license, file type, tags, sort, size filters)
+- List files in a dataset
+- Download dataset files (to specified path or temp dir)
+- Get dataset metadata (JSON format)
+- Create new dataset (title, files dir, license, description, private flag)
+- Create new version (version notes, convert-to-csv flag, delete-old flag)
+- Check dataset status (creation progress, errors)
+- Initialize dataset metadata file
+- Update dataset metadata
+
+### Kernel/Notebook Tools
+- List kernels (search, user, language, type, output type, sort, page)
+- List kernel files
+- Download kernel output (to specified path)
+- Pull kernel code (with optional metadata generation)
+- Get kernel status (ref, title, status, error message, has output)
+- Initialize kernel metadata (notebook/script, python/r)
+- Push kernel (from folder with code + metadata — triggers KKB execution)
+
+### Model Tools
+- List models (search, sort, owner, page)
+- Get model details
+- Initialize model metadata
+- Create new model
+- Update model
+- Delete model
+- Get/create/update/delete model instance (variation)
+- List model instance files
+- Create/download/delete/list-files for model instance version
+
+### Config Tools
+- View current config
+- Set config value (competition, path, proxy)
+- Unset config value
+
+## Usage Patterns
+
+### Search and Download
+```
+Search datasets matching "titanic" → select best match → download it
+```
+
+### Competition Workflow
+```
+List competitions → join → download data → submit predictions → check leaderboard
+```
+
+### Publish Resources
+```
+Create private dataset with title and license → upload files → verify
+```
+
+### Execute Notebook
+```
+Push notebook code → poll status → retrieve output when complete
+```
+
+## Official Documentation
+
+- Full tool reference: https://www.kaggle.com/docs/mcp
+- Blog announcement: https://www.kaggle.com/blog/kaggles-official-mcp-server
+- MCP Protocol spec: https://modelcontextprotocol.io
