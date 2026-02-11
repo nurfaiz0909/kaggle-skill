@@ -26,6 +26,9 @@ downloads/
 *.zip
 *.tar.gz
 
+# Test reports (generated)
+tests/test-*-report-*.md
+
 # IDE / OS
 .vscode/
 .idea/

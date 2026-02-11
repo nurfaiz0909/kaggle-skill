@@ -53,6 +53,23 @@ claude mcp add kaggle --transport http https://www.kaggle.com/mcp \
 }
 ```
 
+## Authentication Requirements by Endpoint
+
+Both legacy API keys and KGAT tokens can list all 47 tools. However, **13 endpoints
+reject legacy API keys** with "Unauthenticated" and require a KGAT token:
+
+| Category | KGAT-Only Endpoints |
+|----------|-------------------|
+| Competition | `search_competitions`, `get_competition_leaderboard`, `list_competition_data_files`, `download_competition_data_files`, `download_competition_data_file`, `download_competition_leaderboard`, `search_competition_submissions`, `get_competition_submission`, `start_competition_submission_upload` |
+| Dataset | `get_dataset_status` |
+| Notebook | `search_notebooks`, `list_notebook_files`, `get_notebook_session_status` |
+
+All other endpoints (34 of 47) work with either token type.
+
+**Recommendation:** Use a KGAT token for the MCP server to get full coverage. If you
+only have a legacy key, competition search/leaderboard/download, dataset status,
+notebook search/files, and session status will fail.
+
 ## Tool Categories
 
 Use `tools/list` for exact tool names. The server provides tools across these categories:
