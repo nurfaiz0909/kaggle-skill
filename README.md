@@ -53,7 +53,7 @@ pip install kagglehub kaggle python-dotenv requests
 
 ## Prerequisites
 
-- Python 3.11+
+- Python 3.9+
 - `pip install kagglehub kaggle python-dotenv requests`
 - Kaggle credentials (run the skill to set up)
 - Optional: `pip install playwright && playwright install chromium` (for browser badges and competition reports)
@@ -95,6 +95,51 @@ kaggle-skill/
 ├── .claude-plugin/marketplace.json # Marketplace config
 └── tests/                          # Test suite
 ```
+
+## Tested Environments
+
+| Environment | Date | Python | Result |
+|-------------|------|--------|--------|
+| **OpenClaw** (macOS arm64, Darwin 25.2.0) | 2026-02-11 | 3.9 | ✅ All tests pass |
+
+### Test Results Summary (OpenClaw, 2026-02-11)
+
+| Category | Test | Result | Notes |
+|----------|------|--------|-------|
+| **Credentials** | check_all_credentials.py | ✅ Pass | All 3 credential types detected |
+| | check_registration.py | ✅ Pass | |
+| | check_credentials.py (kllm) | ✅ Pass | |
+| | network_check.sh | ✅ Pass | Both endpoints reachable |
+| | setup_env.sh (registration) | ✅ Pass | kaggle.json already configured |
+| | setup_env.sh (kllm) | ✅ Pass | |
+| **Competition Reports** | list_competitions.py | ✅ Pass | Returns JSON with active competitions |
+| | competition_details.py --slug titanic | ✅ Pass | Files, leaderboard, kernels returned |
+| **Kaggle CLI** | kaggle competitions list | ✅ Pass | |
+| | kaggle datasets list | ✅ Pass | |
+| | kaggle datasets files heptapod/titanic | ✅ Pass | |
+| | kaggle datasets download heptapod/titanic | ✅ Pass | 83KB downloaded |
+| | kaggle kernels list | ✅ Pass | |
+| | kaggle models list | ✅ Pass | |
+| **kagglehub** | dataset_download("heptapod/titanic") | ✅ Pass | Cached locally |
+| | competition_download("titanic") | ⚠️ Expected fail | 401 — rules not accepted via API; use CLI/UI |
+| **MCP Server** | tools/list | ✅ Pass | 40+ tools returned |
+| | search_competitions | ✅ Pass | Requires KAGGLE_API_TOKEN (KGAT_), not KAGGLE_KEY |
+| | get_competition (titanic) | ✅ Pass | |
+| | search_datasets | ✅ Pass | |
+| | get_dataset_info | ✅ Pass | |
+| | search_notebooks | ✅ Pass | |
+| | list_models | ✅ Pass | |
+| **Badge Collector** | orchestrator.py --status | ✅ Pass | 0/55 earned (fresh) |
+| | orchestrator.py --dry-run --phase 1 | ✅ Pass | 16 badges planned |
+| **Shell Scripts** | cli_download.sh (parameterized) | ✅ Pass | Downloads heptapod/titanic |
+| | cli_execute.sh (usage check) | ✅ Pass | Parameterized, requires args |
+| | cli_competition.sh (usage check) | ✅ Pass | Parameterized, requires args |
+| | cli_publish.sh (usage check) | ✅ Pass | Parameterized, requires args |
+| | poll_kernel.sh (usage check) | ✅ Pass | Parameterized, requires args |
+| | kagglehub_download.py --dataset | ✅ Pass | Parameterized with argparse |
+| | kagglehub_publish.py --help | ✅ Pass | Shows usage |
+
+**Key finding:** MCP server requires `KAGGLE_API_TOKEN` (KGAT_ prefix), not the legacy `KAGGLE_KEY`. The mcp-reference.md has been updated accordingly.
 
 ## License
 

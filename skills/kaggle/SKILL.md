@@ -2,7 +2,7 @@
 name: kaggle
 description: "Unified Kaggle skill. Use when the user mentions kaggle, kaggle.com, Kaggle competitions, datasets, models, notebooks, GPUs, TPUs, badges, or anything Kaggle-related. Handles account setup, competition reports, dataset/model downloads, notebook execution, competition submissions, badge collection, and general Kaggle questions."
 license: MIT
-compatibility: "Python 3.11+, pip packages kagglehub, kaggle, requests, python-dotenv. Optional: playwright for browser badges. Playwright MCP tools for competition reports."
+compatibility: "Python 3.9+, pip packages kagglehub, kaggle, requests, python-dotenv. Optional: playwright for browser badges. Playwright MCP tools for competition reports."
 homepage: https://github.com/shepsci/kaggle-skill
 metadata: {"author": "shepsci", "version": "1.0.0", "openclaw": {"requires": {"bins": ["python3", "pip3"], "env": ["KAGGLE_KEY"]}}}
 allowed-tools: Bash Read WebFetch
@@ -14,6 +14,9 @@ Complete Kaggle integration for any LLM or agentic coding system (Claude Code,
 gemini-cli, Cursor, etc.): account setup, competition reports, dataset/model
 downloads, notebook execution, competition submissions, badge collection, and
 general Kaggle questions. Four integrated modules working together.
+
+> **Overlap guard:** For hackathon grading evaluation and alignment analysis,
+> use the **kaggle-hackathon-grading** skill instead.
 
 **Network requirements:** outbound HTTPS to `api.kaggle.com`, `www.kaggle.com`,
 and `storage.googleapis.com`.
@@ -132,7 +135,9 @@ python3 skills/kaggle/modules/badge-collector/scripts/orchestrator.py --status
 
 ## Orchestration Workflow
 
-When this skill is invoked, follow these steps:
+This skill is primarily a **reference** — use the modules and scripts as needed
+based on the user's request. When explicitly asked to run the **full Kaggle
+workflow**, follow these steps:
 
 ### Step 1: Check Credentials
 

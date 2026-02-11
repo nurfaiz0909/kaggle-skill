@@ -53,22 +53,45 @@ claude mcp add kaggle --transport http https://www.kaggle.com/mcp \
 }
 ```
 
-## Authentication Requirements by Endpoint
+### OpenClaw (via HTTP/curl)
 
-Both legacy API keys and KGAT tokens can list all 47 tools. However, **13 endpoints
-reject legacy API keys** with "Unauthenticated" and require a KGAT token:
+OpenClaw can call the Kaggle MCP server directly over HTTP using the Streamable HTTP transport:
 
-| Category | KGAT-Only Endpoints |
-|----------|-------------------|
-| Competition | `search_competitions`, `get_competition_leaderboard`, `list_competition_data_files`, `download_competition_data_files`, `download_competition_data_file`, `download_competition_leaderboard`, `search_competition_submissions`, `get_competition_submission`, `start_competition_submission_upload` |
-| Dataset | `get_dataset_status` |
-| Notebook | `search_notebooks`, `list_notebook_files`, `get_notebook_session_status` |
+```bash
+# List available tools (use KAGGLE_API_TOKEN, not KAGGLE_KEY)
+curl -s -X POST https://www.kaggle.com/mcp \
+  -H "Authorization: Bearer ${KAGGLE_API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | python3 -m json.tool
 
-All other endpoints (34 of 47) work with either token type.
+# Call a tool (e.g., search competitions)
+curl -s -X POST https://www.kaggle.com/mcp \
+  -H "Authorization: Bearer ${KAGGLE_API_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"search_competitions","arguments":{"search":"titanic"}}}' | python3 -m json.tool
+```
 
-**Recommendation:** Use a KGAT token for the MCP server to get full coverage. If you
-only have a legacy key, competition search/leaderboard/download, dataset status,
-notebook search/files, and session status will fail.
+```python
+# Python requests example
+import os, requests, json
+
+KAGGLE_KEY = os.environ["KAGGLE_API_TOKEN"]  # Use KGAT_ token, not legacy key
+URL = "https://www.kaggle.com/mcp"
+HEADERS = {"Authorization": f"Bearer {KAGGLE_KEY}", "Content-Type": "application/json"}
+
+def mcp_call(method, params=None):
+    payload = {"jsonrpc": "2.0", "id": 1, "method": method}
+    if params:
+        payload["params"] = params
+    resp = requests.post(URL, headers=HEADERS, json=payload)
+    return resp.json()
+
+# List tools
+print(mcp_call("tools/list"))
+
+# Search datasets
+print(mcp_call("tools/call", {"name": "search_datasets", "arguments": {"search": "titanic"}}))
+```
 
 ## Tool Categories
 
