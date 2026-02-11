@@ -57,8 +57,14 @@ scoped permissions. Ensure the token has the required scopes for your operations
   `datasets download` supports `--unzip`. Unzip competition data manually after download.
 - **Competition-linked datasets** (e.g., `titanic/titanic`) return 403 even with valid
   credentials. Use standalone dataset copies or download via `competitions download`.
+- **`competition_download()` 401 in kagglehub** (v0.3.13 and earlier): Returns 401
+  even with valid credentials and accepted rules. The kaggle CLI `competitions download`
+  works fine with the same credentials. Workaround: use `kaggle competitions download`
+  CLI instead of kagglehub for competition data. If you get a genuine "rules not accepted"
+  error, navigate to `https://www.kaggle.com/competitions/<slug>/rules` in the browser
+  (use profile="chrome" in OpenClaw) and click "I Understand and Accept".
 - **MCP Server partial auth**: `search_competitions` and `search_notebooks` may return
-  "Unauthenticated" with legacy API keys. Use kaggle-cli for these operations.
+  "Unauthenticated" with legacy API keys. Use `KAGGLE_API_TOKEN` (KGAT_ prefix) instead.
 
 ## Task Workflows
 
