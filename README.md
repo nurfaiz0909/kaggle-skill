@@ -1,5 +1,9 @@
 # kaggle-skill
 
+[![skills.sh](https://img.shields.io/badge/skills.sh-kaggle--skill-blue)](https://skills.sh/shepsci/kaggle-skill/kaggle)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub](https://img.shields.io/github/stars/shepsci/kaggle-skill?style=social)](https://github.com/shepsci/kaggle-skill)
+
 An [OpenClaw-compatible](https://github.com/openclaw) skill for everything Kaggle: account setup, competition landscape reports, dataset/model downloads, notebook execution, competition submissions, badge collection, and general Kaggle questions.
 
 Works with **any LLM or agentic coding system** that supports the SKILL format — including [Claude Code](https://claude.com/claude-code), [gemini-cli](https://github.com/google-gemini/gemini-cli), [Cursor](https://cursor.com), and others — so long as `api.kaggle.com`, `www.kaggle.com`, and `storage.googleapis.com` are network-reachable.
@@ -34,14 +38,6 @@ This skill is **agent-agnostic**. It uses standard tools (Bash, Read, WebFetch) 
 ```bash
 npx skills add shepsci/kaggle-skill
 ```
-
-### Via Anthropic Marketplace
-
-Search for `kaggle-skill` in the Claude Code skill marketplace.
-
-### Via ClawHub / Open Claw
-
-Install via the Open Claw Chrome extension or ClawHub directory.
 
 ### Manual
 
