@@ -10,9 +10,13 @@ allowed-tools: Bash Read WebFetch
 
 # Kaggle — Unified Skill
 
-Complete Kaggle integration for Claude Code: account setup, competition reports,
-dataset/model downloads, notebook execution, competition submissions, badge
-collection, and general Kaggle questions. Four integrated modules working together.
+Complete Kaggle integration for any LLM or agentic coding system (Claude Code,
+gemini-cli, Cursor, etc.): account setup, competition reports, dataset/model
+downloads, notebook execution, competition submissions, badge collection, and
+general Kaggle questions. Four integrated modules working together.
+
+**Network requirements:** outbound HTTPS to `api.kaggle.com`, `www.kaggle.com`,
+and `storage.googleapis.com`.
 
 ## Modules
 

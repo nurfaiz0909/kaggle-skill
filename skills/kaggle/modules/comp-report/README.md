@@ -6,7 +6,7 @@ rendered SPA content (problem statements, evaluation details, writeups).
 
 ## Workflow
 
-When this module is invoked, Claude follows these 6 steps:
+When this module is invoked, the agent follows these 6 steps:
 
 ### Step 1: Verify Credentials
 
@@ -117,4 +117,4 @@ Output the report inline.
 
 - Kaggle credentials configured (KAGGLE_USERNAME + KAGGLE_KEY in ~/.kaggle/kaggle.json)
 - `pip install kaggle requests`
-- Playwright MCP tools available in Claude Code
+- Playwright MCP tools available in your agent (Claude Code, Cursor, etc.)

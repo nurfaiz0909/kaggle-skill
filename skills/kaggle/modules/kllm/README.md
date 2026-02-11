@@ -27,7 +27,7 @@ scoped permissions. Ensure the token has the required scopes for your operations
 |--------|------|----------|
 | **kagglehub** | Python library (`pip install kagglehub`) | Quick dataset/model download in Python |
 | **kaggle-cli** | CLI (`pip install kaggle`) | Full workflow scripting (competitions, notebooks, datasets, models) |
-| **Kaggle MCP Server** | Remote endpoint `https://www.kaggle.com/mcp` | AI agent integration (Claude Code, Cursor, etc.) |
+| **Kaggle MCP Server** | Remote endpoint `https://www.kaggle.com/mcp` | AI agent integration (Claude Code, gemini-cli, Cursor, etc.) |
 | **Kaggle UI** | Browser via Open Claw Chrome extension | Account setup, verification, visual exploration |
 
 ## Capability Matrix

@@ -289,13 +289,13 @@ Protocol: Streamable HTTP (MCP standard). Auth: KGAT token via `Authorization: B
 
 ### Client Configuration
 
-**Claude Code:**
+**Claude Code (CLI):**
 ```bash
 claude mcp add kaggle --transport http https://www.kaggle.com/mcp \
   --header "Authorization: Bearer <your_api_key>"
 ```
 
-**Generic MCP client (Claude Desktop, Cursor, etc.):**
+**Generic MCP client (gemini-cli, Claude Desktop, Cursor, etc.):**
 ```json
 {
   "mcpServers": {

@@ -23,14 +23,22 @@ The API key is the `key` field from `~/.kaggle/kaggle.json` or your `KAGGLE_API_
 
 ## Client Configuration
 
-### Claude Code
+### Claude Code (CLI)
 
 ```bash
 claude mcp add kaggle --transport http https://www.kaggle.com/mcp \
   --header "Authorization: Bearer YOUR_API_KEY"
 ```
 
-### Claude Desktop / Cursor / Generic MCP Client
+### gemini-cli
+
+```bash
+# Add to your gemini-cli MCP config (see gemini-cli docs for exact syntax)
+# Endpoint: https://www.kaggle.com/mcp
+# Header: Authorization: Bearer YOUR_API_KEY
+```
+
+### Generic MCP Client (Claude Desktop, Cursor, etc.)
 
 ```json
 {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # test_kllm.sh — Comprehensive test suite for the kllm module in shepsci/kaggle-skill
 # Tests every CLI subcommand, every kagglehub function, all 47 MCP endpoints,
-# KKB notebook execution, scripts, and Claude Code skill integration.
+# KKB notebook execution, scripts, and skill integration.
 # Generates a markdown report at ~/kllm-test-report-<timestamp>.md
 set -uo pipefail
 

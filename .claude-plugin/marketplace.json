@@ -5,7 +5,7 @@
     "url": "https://github.com/shepsci"
   },
   "metadata": {
-    "description": "Unified Kaggle skill for Claude Code",
+    "description": "Unified Kaggle skill for any OpenClaw-compatible agent",
     "version": "1.0.0"
   },
   "plugins": [
