@@ -1,20 +1,17 @@
 """Phase 5: Streak badges (~4 badges).
 
-Sets up daily automation for streak badges:
+Generates a daily streak script and prints manual setup instructions:
   - 7-Day Login Streak
   - 30-Day Login Streak
   - Submission Streak (7 days)
   - Super Submission Streak (30 days)
 
-Creates a cron job (Linux) or launchd plist (macOS) that:
-  1. Makes a Kaggle API call to register a "login" (any API activity counts)
-  2. Submits to the Titanic competition daily
+The script makes a Kaggle API call (counts as login) and submits to the
+Titanic competition. Users must manually configure cron/launchd to run it.
 """
 
-import os
 import platform
 import stat
-import sys
 from pathlib import Path
 
 from badge_tracker import set_status, should_attempt
@@ -22,8 +19,6 @@ from utils import REPO_ROOT, TEMPLATES_DIR, get_kaggle_cli, get_username
 
 
 DAILY_SCRIPT_PATH = REPO_ROOT / "skills" / "badge-collector" / "scripts" / "daily_streak.sh"
-LAUNCHD_PLIST_PATH = Path.home() / "Library" / "LaunchAgents" / "com.kaggle.badge-collector.streak.plist"
-CRON_COMMENT = "# kaggle-badge-collector daily streak"
 
 
 def _create_daily_script() -> Path:
@@ -59,82 +54,37 @@ echo "[$(date)] Streak script completed"
     return DAILY_SCRIPT_PATH
 
 
-def _setup_launchd() -> bool:
-    """Set up macOS launchd plist for daily execution."""
-    plist = f"""<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.kaggle.badge-collector.streak</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>/bin/bash</string>
-        <string>{DAILY_SCRIPT_PATH}</string>
-    </array>
-    <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>10</integer>
-        <key>Minute</key>
-        <integer>0</integer>
-    </dict>
-    <key>StandardOutPath</key>
-    <string>{REPO_ROOT}/badge-streak.log</string>
-    <key>StandardErrorPath</key>
-    <string>{REPO_ROOT}/badge-streak.log</string>
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>KAGGLE_USERNAME</key>
-        <string>{os.getenv('KAGGLE_USERNAME', '')}</string>
-        <key>KAGGLE_KEY</key>
-        <string>{os.getenv('KAGGLE_KEY', '')}</string>
-        <key>PATH</key>
-        <string>/usr/local/bin:/usr/bin:/bin:/Library/Frameworks/Python.framework/Versions/3.12/bin</string>
-    </dict>
-</dict>
-</plist>
-"""
-    LAUNCHD_PLIST_PATH.parent.mkdir(parents=True, exist_ok=True)
-    LAUNCHD_PLIST_PATH.write_text(plist)
-    print(f"  Created launchd plist: {LAUNCHD_PLIST_PATH}")
-    print(f"  To activate: launchctl load {LAUNCHD_PLIST_PATH}")
-    print(f"  To deactivate: launchctl unload {LAUNCHD_PLIST_PATH}")
-    return True
+def _print_setup_instructions(script_path: Path) -> None:
+    """Print platform-specific manual setup instructions."""
+    system = platform.system()
 
+    print("\n  To earn streak badges, run this script daily for 7/30 days.")
+    print(f"  Script location: {script_path}")
+    print()
 
-def _setup_cron() -> bool:
-    """Set up cron job for daily execution."""
-    import subprocess
-
-    # Check if cron job already exists
-    result = subprocess.run(["crontab", "-l"], capture_output=True, text=True)
-    existing = result.stdout if result.returncode == 0 else ""
-
-    if CRON_COMMENT in existing:
-        print("  Cron job already exists")
-        return True
-
-    # Add cron job (10:00 AM daily)
-    new_cron = existing.rstrip() + f"\n{CRON_COMMENT}\n0 10 * * * {DAILY_SCRIPT_PATH}\n"
-
-    proc = subprocess.run(
-        ["crontab", "-"],
-        input=new_cron,
-        capture_output=True,
-        text=True,
-    )
-
-    if proc.returncode == 0:
-        print("  Cron job installed (runs daily at 10:00 AM)")
-        return True
+    if system == "Darwin":
+        print("  --- macOS: manual launchd setup ---")
+        print(f"  1. Create a plist at ~/Library/LaunchAgents/com.kaggle.streak.plist")
+        print(f"     with ProgramArguments pointing to: /bin/bash {script_path}")
+        print(f"     and a StartCalendarInterval for your preferred time (e.g. 10:00 AM).")
+        print(f"  2. Load it: launchctl load ~/Library/LaunchAgents/com.kaggle.streak.plist")
+        print(f"  3. To stop: launchctl unload ~/Library/LaunchAgents/com.kaggle.streak.plist")
     else:
-        print(f"  [WARN] Failed to install cron job: {proc.stderr}")
-        return False
+        print("  --- Linux: manual cron setup ---")
+        print(f"  1. Open crontab: crontab -e")
+        print(f"  2. Add this line (runs daily at 10:00 AM):")
+        print(f"     0 10 * * * {script_path}")
+        print(f"  3. Save and exit. Verify with: crontab -l")
+
+    print()
+    print(f"  Or run manually anytime: bash {script_path}")
 
 
 def run(username: str) -> tuple[int, int]:
-    """Set up daily streak automation. Returns (attempted, succeeded)."""
+    """Generate daily streak script and print setup instructions.
+
+    Returns (attempted, succeeded).
+    """
     badge_ids = [
         "seven_day_login_streak",
         "thirty_day_login_streak",
@@ -147,29 +97,18 @@ def run(username: str) -> tuple[int, int]:
         print("  All streak badges already earned/skipped")
         return 0, 0
 
-    print("\n  --- Setting up daily streak automation ---")
+    print("\n  --- Phase 5: Streak badge setup ---")
 
     # Create the daily script
     script_path = _create_daily_script()
     print(f"  Created daily script: {script_path}")
 
-    # Set up scheduler based on platform
-    system = platform.system()
-    if system == "Darwin":
-        success = _setup_launchd()
-    else:
-        success = _setup_cron()
+    # Print manual setup instructions (no auto-install)
+    _print_setup_instructions(script_path)
 
-    if success:
-        for bid in actionable:
-            set_status(bid, "attempting", "daily automation configured — badges earned over time")
-        print("\n  Streak automation configured!")
-        print("  Badges will be earned after 7/30 days of daily execution.")
-        print(f"  Monitor progress: tail -f {REPO_ROOT}/badge-streak.log")
-        return len(actionable), len(actionable)
-    else:
-        for bid in actionable:
-            set_status(bid, "failed", "scheduler setup failed")
-        print("\n  [FAIL] Could not set up daily automation")
-        print(f"  You can manually run: bash {script_path}")
-        return len(actionable), 0
+    for bid in actionable:
+        set_status(bid, "attempting", "daily script created — run manually or schedule via cron/launchd")
+
+    print("\n  Streak setup complete!")
+    print("  Badges will be earned after 7/30 days of daily execution.")
+    return len(actionable), len(actionable)

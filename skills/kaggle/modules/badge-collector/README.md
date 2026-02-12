@@ -1,8 +1,9 @@
 # Badge Collector
 
 Systematically earns Kaggle badges across 5 phases using kagglehub, kaggle-cli,
-Playwright, and cron/launchd automation. Builds on the `kllm` module for credential
-management and Kaggle API interaction.
+and Playwright. Phase 5 generates a daily streak script with manual cron/launchd
+setup instructions. Builds on the `kllm` module for credential management and
+Kaggle API interaction.
 
 ## Quick Start
 
@@ -31,7 +32,7 @@ python3 skills/kaggle/modules/badge-collector/scripts/orchestrator.py --phase al
 | 2 | Competition | ~7 | 10-15 min |
 | 3 | Pipeline | ~3 | 15-30 min |
 | 4 | Browser | ~8 | 5-10 min |
-| 5 | Streaks | ~4 | Setup only (runs daily) |
+| 5 | Streaks | ~4 | Setup only (generates script + manual scheduling) |
 
 ## Prerequisites
 
@@ -68,7 +69,7 @@ Use `--status` to view progress or `--resume` to continue from where you left of
 - `scripts/phase_2_competition.py` — Competition badges
 - `scripts/phase_3_pipeline.py` — Pipeline badges (requires KKB)
 - `scripts/phase_4_browser.py` — Browser badges (Playwright)
-- `scripts/phase_5_streaks.py` — Streak automation setup
+- `scripts/phase_5_streaks.py` — Streak script generation + manual setup instructions
 - `scripts/utils.py` — Shared utilities
 
 ## References

@@ -4,7 +4,7 @@ description: "Unified Kaggle skill. Use when the user mentions kaggle, kaggle.co
 license: MIT
 compatibility: "Python 3.9+, pip packages kagglehub, kaggle, requests, python-dotenv. Optional: playwright for browser badges. Playwright MCP tools for competition reports."
 homepage: https://github.com/shepsci/kaggle-skill
-metadata: {"author": "shepsci", "version": "1.0.0", "openclaw": {"requires": {"bins": ["python3", "pip3"], "env": ["KAGGLE_KEY"]}}}
+metadata: {"author": "shepsci", "version": "1.0.1", "primaryEnv": "KAGGLE_KEY", "openclaw": {"requires": {"bins": ["python3", "pip3"], "env": ["KAGGLE_USERNAME", "KAGGLE_KEY", "KAGGLE_API_TOKEN"]}}}
 allowed-tools: Bash Read WebFetch
 ---
 
@@ -185,6 +185,26 @@ more options.
 - Set file permissions: `chmod 600 .env ~/.kaggle/kaggle.json`
 - If credentials are accidentally exposed, rotate them immediately at
   [https://www.kaggle.com/settings](https://www.kaggle.com/settings)
+
+## Scope of Operations
+
+This skill performs both read-only and write operations on kaggle.com.
+
+**Read-only operations** (no account side-effects):
+- List/search competitions, datasets, models, notebooks
+- Download datasets, models, competition data
+- View leaderboards, competition details, badge progress
+- Generate competition landscape reports
+
+**Write operations** (create or modify resources on your account):
+- Create/publish datasets, notebooks, models (always private by default)
+- Submit predictions to competitions
+- Push and execute notebooks on Kaggle Kernel Backend (KKB)
+- Earn badges through API activity (profile-visible)
+
+**Phase 5 (Streaks)** generates a local shell script for daily execution but
+does **not** auto-install cron jobs or launchd plists. Users must manually
+configure scheduling if desired.
 
 ## Scripts Index
 
